@@ -9,7 +9,8 @@
       "@models/*": ["models/*"],
       "@store/*": ["store/*"],
       "@data/*": ["data/*"],
-      "@assets/*": ["assets/*"]
+      "@assets/*": ["assets/*"],
+      "@screens/*": ["screens/*"]
     }
   }
 }

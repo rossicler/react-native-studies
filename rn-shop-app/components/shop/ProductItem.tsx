@@ -1,6 +1,7 @@
 import React from "react";
 import { StyleSheet, Text, View, Image, Button } from "react-native";
 
+import TouchableCmp from "@components/ui/TouchableCmp";
 import Colors from "@constants/Colors";
 
 interface ProductItemProps {
@@ -14,24 +15,30 @@ interface ProductItemProps {
 const ProductItem = (props: ProductItemProps) => {
   return (
     <View style={styles.product}>
-      <View style={styles.imageContainer}>
-        <Image source={{ uri: props.image }} style={styles.image} />
-      </View>
-      <View style={styles.details}>
-        <Text style={styles.title}>{props.title}</Text>
-        <Text style={styles.price}>${props.price.toFixed(2)}</Text>
-      </View>
-      <View style={styles.actions}>
-        <Button
-          title="View Details"
-          onPress={props.onViewDetail}
-          color={Colors.primary}
-        />
-        <Button
-          title="To Cart"
-          onPress={props.onAddToCart}
-          color={Colors.primary}
-        />
+      <View style={styles.touchable}>
+        <TouchableCmp onPress={props.onViewDetail} useForeground>
+          <View>
+            <View style={styles.imageContainer}>
+              <Image source={{ uri: props.image }} style={styles.image} />
+            </View>
+            <View style={styles.details}>
+              <Text style={styles.title}>{props.title}</Text>
+              <Text style={styles.price}>${props.price.toFixed(2)}</Text>
+            </View>
+            <View style={styles.actions}>
+              <Button
+                title="View Details"
+                onPress={props.onViewDetail}
+                color={Colors.primary}
+              />
+              <Button
+                title="To Cart"
+                onPress={props.onAddToCart}
+                color={Colors.primary}
+              />
+            </View>
+          </View>
+        </TouchableCmp>
       </View>
     </View>
   );
@@ -51,6 +58,10 @@ const styles = StyleSheet.create({
     height: 300,
     margin: 20,
   },
+  touchable: {
+    overflow: "hidden",
+    borderRadius: 10,
+  },
   imageContainer: {
     width: "100%",
     height: "60%",
@@ -68,10 +79,12 @@ const styles = StyleSheet.create({
     padding: 10,
   },
   title: {
+    fontFamily: "open-sans-bold",
     fontSize: 18,
-    marginVertical: 4,
+    marginVertical: 2,
   },
   price: {
+    fontFamily: "open-sans",
     fontSize: 14,
     color: "#888",
   },
