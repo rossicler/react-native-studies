@@ -2,7 +2,7 @@ import React from "react";
 import { StyleSheet, Text, View, Image, Button } from "react-native";
 
 import TouchableCmp from "@components/ui/TouchableCmp";
-import Colors from "@constants/Colors";
+import Card from "@components/ui/Card";
 
 interface ProductItemProps {
   image: string;
@@ -14,7 +14,7 @@ interface ProductItemProps {
 
 const ProductItem = (props: ProductItemProps) => {
   return (
-    <View style={styles.product}>
+    <Card style={styles.product}>
       <View style={styles.touchable}>
         <TouchableCmp onPress={props.onSelect} useForeground>
           <View>
@@ -29,7 +29,7 @@ const ProductItem = (props: ProductItemProps) => {
           </View>
         </TouchableCmp>
       </View>
-    </View>
+    </Card>
   );
 };
 
@@ -37,13 +37,6 @@ export default ProductItem;
 
 const styles = StyleSheet.create({
   product: {
-    shadowColor: "black",
-    shadowOpacity: 0.26,
-    shadowOffset: { width: 0, height: 2 },
-    shadowRadius: 8,
-    elevation: 5,
-    borderRadius: 10,
-    backgroundColor: "white",
     height: 300,
     margin: 20,
   },
