@@ -8,15 +8,15 @@ interface ProductItemProps {
   image: string;
   title: string;
   price: number;
-  onViewDetail: () => any;
-  onAddToCart: () => any;
+  onSelect: () => any;
+  children: any;
 }
 
 const ProductItem = (props: ProductItemProps) => {
   return (
     <View style={styles.product}>
       <View style={styles.touchable}>
-        <TouchableCmp onPress={props.onViewDetail} useForeground>
+        <TouchableCmp onPress={props.onSelect} useForeground>
           <View>
             <View style={styles.imageContainer}>
               <Image source={{ uri: props.image }} style={styles.image} />
@@ -25,18 +25,7 @@ const ProductItem = (props: ProductItemProps) => {
               <Text style={styles.title}>{props.title}</Text>
               <Text style={styles.price}>${props.price.toFixed(2)}</Text>
             </View>
-            <View style={styles.actions}>
-              <Button
-                title="View Details"
-                onPress={props.onViewDetail}
-                color={Colors.primary}
-              />
-              <Button
-                title="To Cart"
-                onPress={props.onAddToCart}
-                color={Colors.primary}
-              />
-            </View>
+            <View style={styles.actions}>{props.children}</View>
           </View>
         </TouchableCmp>
       </View>

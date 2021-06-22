@@ -1,14 +1,56 @@
 import React from "react";
-import { StyleSheet, Text, View } from "react-native";
+import { Button, FlatList, Platform } from "react-native";
+import { useSelector, useDispatch } from "react-redux";
+import { HeaderButtons, Item } from "react-navigation-header-buttons";
 
-const UserProductsScreen = () => {
+import ProductItem from "@components/shop/ProductItem";
+import HeaderButton from "@components/ui/HeaderButton";
+import * as productsActions from "@store/actions/products";
+import Colors from "@constants/Colors";
+
+const UserProductsScreen = (props) => {
+  const userProducts = useSelector((state) => state.products.userProducts);
+  const dispatch = useDispatch();
+
   return (
-    <View>
-      <Text></Text>
-    </View>
+    <FlatList
+      data={userProducts}
+      renderItem={(itemData) => (
+        <ProductItem
+          image={itemData.item.imageUrl}
+          title={itemData.item.title}
+          price={itemData.item.price}
+          onSelect={() => {}}
+        >
+          <Button title="Edit" color={Colors.primary} onPress={() => {}} />
+          <Button
+            title="Delete"
+            color={Colors.primary}
+            onPress={() => {
+              dispatch(productsActions.deleteProduct(itemData.item.id));
+            }}
+          />
+        </ProductItem>
+      )}
+    />
   );
 };
 
-export default UserProductsScreen;
+UserProductsScreen.navigationOptions = (navData) => {
+  return {
+    headerTitle: "My Products",
+    headerLeft: () => {
+      return (
+        <HeaderButtons HeaderButtonComponent={HeaderButton}>
+          <Item
+            title="Menu"
+            iconName={Platform.OS === "android" ? "md-menu" : "ios-menu"}
+            onPress={() => navData.navigation.toggleDrawer()}
+          />
+        </HeaderButtons>
+      );
+    },
+  };
+};
 
-const styles = StyleSheet.create({});
+export default UserProductsScreen;
