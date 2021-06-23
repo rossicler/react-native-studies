@@ -1,5 +1,5 @@
 import { Order } from "@models/order";
-import { ADD_ORDER } from "@store/actions/orders";
+import { ADD_ORDER, SET_ORDERS } from "@store/actions/orders";
 import moment from "moment";
 
 const inicialState = {
@@ -8,12 +8,15 @@ const inicialState = {
 
 export default (state = inicialState, action) => {
   switch (action.type) {
+    case SET_ORDERS:
+      state = { orders: action.orders };
+      break;
     case ADD_ORDER:
       const newOrder: Order = {
-        id: new Date().toString(),
+        id: action.orderData.id,
         items: action.orderData.items,
         totalAmount: action.orderData.amount,
-        date: moment().format("MMMM Do YYYY, hh:mm"),
+        date: moment(action.orderData.date).format("MMMM Do YYYY, hh:mm"),
       };
       state = { ...state, orders: state.orders.concat(newOrder) };
       break;

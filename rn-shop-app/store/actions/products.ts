@@ -39,12 +39,16 @@ export const fetchProducts = () => {
 
 export const deleteProduct = (producId) => {
   return async (dispatch) => {
-    await fetch(
+    const response = await fetch(
       `https://rn-complete-guide-dcf3a-default-rtdb.firebaseio.com/products/${producId}.json`,
       {
         method: "DELETE",
       }
     );
+
+    if (!response.ok) {
+      throw new Error("Something went wrong!");
+    }
 
     dispatch({ type: DELETE_PRODUCT, pid: producId });
   };
@@ -52,7 +56,6 @@ export const deleteProduct = (producId) => {
 
 export const createProduct = (product: Product) => {
   return async (dispatch) => {
-    // any async code you want!
     const response = await fetch(
       "https://rn-complete-guide-dcf3a-default-rtdb.firebaseio.com/products.json",
       {
@@ -77,7 +80,7 @@ export const createProduct = (product: Product) => {
 
 export const updateProduct = (product: Product) => {
   return async (dispatch) => {
-    await fetch(
+    const response = await fetch(
       `https://rn-complete-guide-dcf3a-default-rtdb.firebaseio.com/products/${product.id}.json`,
       {
         method: "PATCH",
@@ -91,6 +94,10 @@ export const updateProduct = (product: Product) => {
         }),
       }
     );
+
+    if (!response.ok) {
+      throw new Error("Something went wrong!");
+    }
 
     dispatch({ type: UPDATE_PRODUCT, pid: product.id, productData: product });
   };
