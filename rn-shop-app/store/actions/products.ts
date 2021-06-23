@@ -38,7 +38,16 @@ export const fetchProducts = () => {
 };
 
 export const deleteProduct = (producId) => {
-  return { type: DELETE_PRODUCT, pid: producId };
+  return async (dispatch) => {
+    await fetch(
+      `https://rn-complete-guide-dcf3a-default-rtdb.firebaseio.com/products/${producId}.json`,
+      {
+        method: "DELETE",
+      }
+    );
+
+    dispatch({ type: DELETE_PRODUCT, pid: producId });
+  };
 };
 
 export const createProduct = (product: Product) => {
@@ -67,5 +76,22 @@ export const createProduct = (product: Product) => {
 };
 
 export const updateProduct = (product: Product) => {
-  return { type: UPDATE_PRODUCT, pid: product.id, productData: product };
+  return async (dispatch) => {
+    await fetch(
+      `https://rn-complete-guide-dcf3a-default-rtdb.firebaseio.com/products/${product.id}.json`,
+      {
+        method: "PATCH",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          title: product.title,
+          imageUrl: product.imageUrl,
+          description: product.description,
+        }),
+      }
+    );
+
+    dispatch({ type: UPDATE_PRODUCT, pid: product.id, productData: product });
+  };
 };
