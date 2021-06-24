@@ -6,7 +6,8 @@ export const UPDATE_PRODUCT = "UPDATE_PRODUCT";
 export const SET_PRODUCTS = "SET_PRODUCTS";
 
 export const fetchProducts = () => {
-  return async (dispatch) => {
+  return async (dispatch, getState) => {
+    const userId = getState().auth.userId;
     try {
       const response = await fetch(
         "https://rn-complete-guide-dcf3a-default-rtdb.firebaseio.com/products.json"
@@ -22,7 +23,7 @@ export const fetchProducts = () => {
       for (const key in resData) {
         const newProduct: Product = {
           id: key,
-          ownerId: "u1",
+          ownerId: resData[key].userId,
           title: resData[key].title,
           imageUrl: resData[key].imageUrl,
           price: resData[key].price,
@@ -30,7 +31,11 @@ export const fetchProducts = () => {
         };
         loadedProducts.push(newProduct);
       }
-      dispatch({ type: SET_PRODUCTS, products: loadedProducts });
+      dispatch({
+        type: SET_PRODUCTS,
+        products: loadedProducts,
+        userProducts: loadedProducts.filter((prod) => prod.ownerId === userId),
+      });
     } catch (err) {
       throw err;
     }
@@ -38,9 +43,10 @@ export const fetchProducts = () => {
 };
 
 export const deleteProduct = (producId) => {
-  return async (dispatch) => {
+  return async (dispatch, getState) => {
+    const token = getState().auth.token;
     const response = await fetch(
-      `https://rn-complete-guide-dcf3a-default-rtdb.firebaseio.com/products/${producId}.json`,
+      `https://rn-complete-guide-dcf3a-default-rtdb.firebaseio.com/products/${producId}.json?auth=${token}`,
       {
         method: "DELETE",
       }
@@ -55,9 +61,12 @@ export const deleteProduct = (producId) => {
 };
 
 export const createProduct = (product: Product) => {
-  return async (dispatch) => {
+  return async (dispatch, getState) => {
+    const token = getState().auth.token;
+    const userId = getState().auth.userId;
+    product.ownerId = userId;
     const response = await fetch(
-      "https://rn-complete-guide-dcf3a-default-rtdb.firebaseio.com/products.json",
+      `https://rn-complete-guide-dcf3a-default-rtdb.firebaseio.com/products.json?auth=${token}`,
       {
         method: "POST",
         headers: {
@@ -68,6 +77,7 @@ export const createProduct = (product: Product) => {
           imageUrl: product.imageUrl,
           price: product.price,
           description: product.description,
+          ownerId: product.ownerId,
         }),
       }
     );
@@ -79,9 +89,10 @@ export const createProduct = (product: Product) => {
 };
 
 export const updateProduct = (product: Product) => {
-  return async (dispatch) => {
+  return async (dispatch, getState) => {
+    const token = getState().auth.token;
     const response = await fetch(
-      `https://rn-complete-guide-dcf3a-default-rtdb.firebaseio.com/products/${product.id}.json`,
+      `https://rn-complete-guide-dcf3a-default-rtdb.firebaseio.com/products/${product.id}.json?auth=${token}`,
       {
         method: "PATCH",
         headers: {
