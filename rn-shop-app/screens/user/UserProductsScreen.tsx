@@ -5,6 +5,7 @@ import { HeaderButtons, Item } from "react-navigation-header-buttons";
 
 import ProductItem from "@components/shop/ProductItem";
 import HeaderButton from "@components/ui/HeaderButton";
+import EmptyScreen from "@components/ui/EmptyScreen";
 import * as productsActions from "@store/actions/products";
 import Colors from "@constants/Colors";
 
@@ -28,6 +29,12 @@ const UserProductsScreen = (props) => {
       },
     ]);
   };
+
+  if (userProducts.length === 0) {
+    return (
+      <EmptyScreen message="No products found, maybe start creating some?" />
+    );
+  }
 
   return (
     <FlatList

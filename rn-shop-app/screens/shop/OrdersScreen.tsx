@@ -5,6 +5,7 @@ import { useSelector, useDispatch } from "react-redux";
 
 import HeaderButton from "@components/ui/HeaderButton";
 import OrderItem from "@components/shop/OrderItem";
+import EmptyScreen from "@components/ui/EmptyScreen";
 import * as ordersActions from "@store/actions/orders";
 import Colors from "@constants/Colors";
 
@@ -28,6 +29,12 @@ const OrdersScreen = (props) => {
       <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
         <ActivityIndicator size="large" color={Colors.primary} />
       </View>
+    );
+  }
+
+  if (orders.length === 0) {
+    return (
+      <EmptyScreen message="No orders found, maybe start ordering some products?" />
     );
   }
 

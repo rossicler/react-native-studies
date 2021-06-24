@@ -23,7 +23,7 @@ export const fetchProducts = () => {
       for (const key in resData) {
         const newProduct: Product = {
           id: key,
-          ownerId: resData[key].userId,
+          ownerId: resData[key].ownerId,
           title: resData[key].title,
           imageUrl: resData[key].imageUrl,
           price: resData[key].price,
