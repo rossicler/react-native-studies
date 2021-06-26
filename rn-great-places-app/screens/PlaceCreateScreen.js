@@ -9,11 +9,14 @@ import {
 } from "react-native";
 import { useDispatch } from "react-redux";
 
+import ImagePicker from "../components/ImagePicker";
+import LocationPicker from "../components/LocationPicker";
 import Colors from "../constants/Colors";
 import * as placesActions from "../store/actions/places";
 
 const PlaceCreateScreen = (props) => {
   const [titleValue, setTitleValue] = useState("");
+  const [selectedImage, setSelectedImage] = useState();
 
   const dispatch = useDispatch();
 
@@ -21,8 +24,12 @@ const PlaceCreateScreen = (props) => {
     setTitleValue(text);
   };
 
+  const imageTakenHandler = (imagePath) => {
+    setSelectedImage(imagePath);
+  };
+
   const savePlaceHandler = () => {
-    dispatch(placesActions.addPlace(titleValue));
+    dispatch(placesActions.addPlace(titleValue, selectedImage));
     props.navigation.goBack();
   };
 
@@ -35,6 +42,8 @@ const PlaceCreateScreen = (props) => {
           onChangeText={titleChangeHandler}
           value={titleValue}
         />
+        <ImagePicker onImageTaken={imageTakenHandler} />
+        <LocationPicker navigation={props.navigation} />
         <Button
           title="Save Place"
           color={Colors.primary}
