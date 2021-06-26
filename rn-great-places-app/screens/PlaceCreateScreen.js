@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useCallback } from "react";
 import {
   StyleSheet,
   Text,
@@ -17,6 +17,7 @@ import * as placesActions from "../store/actions/places";
 const PlaceCreateScreen = (props) => {
   const [titleValue, setTitleValue] = useState("");
   const [selectedImage, setSelectedImage] = useState();
+  const [selectedLocation, setSelectedLocation] = useState();
 
   const dispatch = useDispatch();
 
@@ -28,8 +29,17 @@ const PlaceCreateScreen = (props) => {
     setSelectedImage(imagePath);
   };
 
+  const locationPickedHandler = useCallback(
+    (location) => {
+      setSelectedLocation(location);
+    },
+    [setSelectedLocation]
+  );
+
   const savePlaceHandler = () => {
-    dispatch(placesActions.addPlace(titleValue, selectedImage));
+    dispatch(
+      placesActions.addPlace(titleValue, selectedImage, selectedLocation)
+    );
     props.navigation.goBack();
   };
 
@@ -43,7 +53,10 @@ const PlaceCreateScreen = (props) => {
           value={titleValue}
         />
         <ImagePicker onImageTaken={imageTakenHandler} />
-        <LocationPicker navigation={props.navigation} />
+        <LocationPicker
+          navigation={props.navigation}
+          onLocationPicked={locationPickedHandler}
+        />
         <Button
           title="Save Place"
           color={Colors.primary}
