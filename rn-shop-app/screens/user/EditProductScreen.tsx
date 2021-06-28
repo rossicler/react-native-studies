@@ -94,8 +94,6 @@ const EditProductScreen = (props) => {
         await dispath(productsActions.updateProduct(updatedProduct));
       } else {
         const newProduct: Product = {
-          id: new Date().toString(),
-          ownerId: "u1",
           title: formState.inputValues.title,
           imageUrl: formState.inputValues.imageUrl,
           price: +formState.inputValues.price,

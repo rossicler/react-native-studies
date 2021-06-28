@@ -1,4 +1,5 @@
 import { Product } from "@models/product";
+import * as Notifications from "expo-notifications";
 
 export const DELETE_PRODUCT = "DELETE_PRODUCT";
 export const CREATE_PRODUCT = "CREATE_PRODUCT";
@@ -24,6 +25,7 @@ export const fetchProducts = () => {
         const newProduct: Product = {
           id: key,
           ownerId: resData[key].ownerId,
+          ownerPushToken: resData[key].ownerPushToken,
           title: resData[key].title,
           imageUrl: resData[key].imageUrl,
           price: resData[key].price,
@@ -62,6 +64,17 @@ export const deleteProduct = (producId) => {
 
 export const createProduct = (product: Product) => {
   return async (dispatch, getState) => {
+    let pushToken;
+    let statusObj = await Notifications.getPermissionsAsync();
+    if (statusObj.status !== "granted") {
+      statusObj = await Notifications.requestPermissionsAsync();
+      if (statusObj.status !== "granted") {
+        pushToken = null;
+      }
+    }
+    if (statusObj.status === "granted") {
+      pushToken = (await Notifications.getExpoPushTokenAsync()).data;
+    }
     const token = getState().auth.token;
     const userId = getState().auth.userId;
     product.ownerId = userId;
@@ -78,6 +91,7 @@ export const createProduct = (product: Product) => {
           price: product.price,
           description: product.description,
           ownerId: product.ownerId,
+          ownerPushToken: pushToken,
         }),
       }
     );
