@@ -16,7 +16,7 @@ import TextStyled from "../components/TextStyled";
 import Colors from "../constants/Colors";
 import * as pokemonsActions from "../store/pokemon-actions";
 
-const PokemonListScreen = () => {
+const PokemonListScreen = (props) => {
   const allPokemons = useSelector((state) => state.pokemons.pokemons);
 
   const [searchText, setSearchText] = useState(""),
@@ -97,7 +97,16 @@ const PokemonListScreen = () => {
       <FlatList
         keyExtractor={(item) => item.id.toString()}
         data={pokemons}
-        renderItem={(itemData) => <PokemonCard pokemon={itemData.item} />}
+        renderItem={(itemData) => (
+          <PokemonCard
+            pokemon={itemData.item}
+            onSelect={() =>
+              props.navigation.navigate("PokemonDetail", {
+                pokemon: itemData.item,
+              })
+            }
+          />
+        )}
         numColumns={3}
         onEndReached={() => onEndReachedHandler()}
       />
@@ -118,7 +127,7 @@ const styles = StyleSheet.create({
     marginHorizontal: 15,
   },
   centered: {
-    flex: 1,
+    height: 30,
     justifyContent: "center",
     alignItems: "center",
   },

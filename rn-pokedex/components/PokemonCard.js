@@ -3,6 +3,7 @@ import { StyleSheet, View, Image } from "react-native";
 
 import Colors from "../constants/Colors";
 import TextStyled from "../components/TextStyled";
+import TouchableStyled from "../components/TouchableStyled";
 
 const PokemonCard = ({ pokemon, ...props }) => {
   const pokemonColor = Colors.pokemonColors[pokemon.types[0].type.name];
@@ -22,15 +23,21 @@ const PokemonCard = ({ pokemon, ...props }) => {
         borderColor: pokemonColor,
       }}
     >
-      <View style={styles.idContainer}>
-        <TextStyled style={{ ...styles.idText, color: pokemonColor }}>
-          {getIdText(pokemon.id)}
-        </TextStyled>
-      </View>
-      <Image source={{ uri: pokemon.imageUrl }} style={styles.image} />
-      <View style={{ ...styles.titleContainer, backgroundColor: pokemonColor }}>
-        <TextStyled style={styles.titleText}>{pokemon.name}</TextStyled>
-      </View>
+      <TouchableStyled onPress={props.onSelect}>
+        <View>
+          <View style={styles.idContainer}>
+            <TextStyled style={{ ...styles.idText, color: pokemonColor }}>
+              {getIdText(pokemon.id)}
+            </TextStyled>
+          </View>
+          <Image source={{ uri: pokemon.imageUrl }} style={styles.image} />
+          <View
+            style={{ ...styles.titleContainer, backgroundColor: pokemonColor }}
+          >
+            <TextStyled style={styles.titleText}>{pokemon.name}</TextStyled>
+          </View>
+        </View>
+      </TouchableStyled>
     </View>
   );
 };
