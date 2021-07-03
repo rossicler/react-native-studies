@@ -3,10 +3,22 @@ import { Pokemon } from "../models/pokemon.model";
 export const SET_POKEMONS = "SET_POKEMONS";
 
 export const fetchPokemons = () => {
-  return async (dispatch) => {
+  return async (dispatch, getState) => {
+    const pokemons = getState().pokemons.pokemons;
     try {
+      const maxPokemons = 151;
+      const offset = pokemons.length;
+      let limit = 15;
+
+      if (offset > maxPokemons - limit) {
+        limit = maxPokemons - offset;
+      }
+      if (limit === 0) {
+        return;
+      }
+
       const responseList = await fetch(
-        "https://pokeapi.co/api/v2/pokemon/?limit=10"
+        `https://pokeapi.co/api/v2/pokemon/?limit=${limit}&offset=${offset}`
       );
 
       if (!responseList.ok) {
@@ -14,7 +26,7 @@ export const fetchPokemons = () => {
       }
 
       const resData = await responseList.json();
-      const loadedPokemons = [];
+      const loadedPokemons = pokemons;
 
       for (item of resData.results) {
         const response = await fetch(item.url);

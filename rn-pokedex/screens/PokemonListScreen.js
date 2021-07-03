@@ -12,15 +12,19 @@ import { SafeAreaView } from "react-native-safe-area-context";
 import { useDispatch, useSelector } from "react-redux";
 
 import SearchInput from "../components/SearchInput";
+import PokemonCard from "../components/PokemonCard";
 import Colors from "../constants/Colors";
 import * as pokemonsActions from "../store/pokemon-actions";
 
 const PokemonListScreen = () => {
-  const pokemons = useSelector((state) => state.pokemons.pokemons);
+  const allPokemons = useSelector((state) => state.pokemons.pokemons);
 
   const [searchText, setSearchText] = useState(""),
     [error, setError] = useState(false),
-    [isLoading, setIsLoading] = useState(false);
+    [isLoading, setIsLoading] = useState(false),
+    [pokemons, setPokemons] = useState(
+      useSelector((state) => state.pokemons.pokemons)
+    );
 
   const dispatch = useDispatch();
 
@@ -39,6 +43,23 @@ const PokemonListScreen = () => {
     loadPokemons();
   }, [loadPokemons]);
 
+  useEffect(() => {
+    if (searchText.length > 0) {
+      const filteredPokemons = allPokemons.filter((pokemon) =>
+        pokemon.name.includes(searchText.toLowerCase())
+      );
+      setPokemons(filteredPokemons);
+    } else {
+      setPokemons(allPokemons);
+    }
+  }, [searchText]);
+
+  const onEndReachedHandler = () => {
+    if (!isLoading) {
+      loadPokemons();
+    }
+  };
+
   if (error) {
     return (
       <SafeAreaView style={styles.screen}>
@@ -49,16 +70,6 @@ const PokemonListScreen = () => {
             onPress={loadPokemons}
             color={Colors.darkGray}
           />
-        </View>
-      </SafeAreaView>
-    );
-  }
-
-  if (isLoading) {
-    return (
-      <SafeAreaView style={styles.screen}>
-        <View style={styles.centered}>
-          <ActivityIndicator size="large" color={Colors.darkGray} />
         </View>
       </SafeAreaView>
     );
@@ -86,8 +97,15 @@ const PokemonListScreen = () => {
       <FlatList
         keyExtractor={(item) => item.id.toString()}
         data={pokemons}
-        renderItem={(itemData) => <Text>{itemData.item.name}</Text>}
+        renderItem={(itemData) => <PokemonCard pokemon={itemData.item} />}
+        numColumns={3}
+        onEndReached={() => onEndReachedHandler()}
       />
+      {isLoading && (
+        <View style={styles.centered}>
+          <ActivityIndicator size="large" color={Colors.darkGray} />
+        </View>
+      )}
     </SafeAreaView>
   );
 };
@@ -97,7 +115,7 @@ export default PokemonListScreen;
 const styles = StyleSheet.create({
   screen: {
     flex: 1,
-    marginHorizontal: 30,
+    marginHorizontal: 15,
   },
   centered: {
     flex: 1,

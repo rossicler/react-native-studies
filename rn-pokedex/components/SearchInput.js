@@ -72,7 +72,7 @@ const styles = StyleSheet.create({
     borderColor: Colors.lightGray,
     borderWidth: 1,
     borderRadius: 8,
-    height: 30,
+    height: 35,
     backgroundColor: Colors.background,
   },
   touchable: {
