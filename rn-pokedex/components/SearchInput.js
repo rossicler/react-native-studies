@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import {
   StyleSheet,
   Text,
@@ -11,9 +11,13 @@ import { Ionicons } from "@expo/vector-icons";
 
 import Colors from "../constants/Colors";
 
-const SearchInput = () => {
+const SearchInput = (props) => {
   const [text, setText] = useState(""),
     [isFocused, setIsFocused] = useState(false);
+
+  useEffect(() => {
+    props.onChangeText(text);
+  }, [text, setText]);
 
   const onFocusHandler = () => {
     setIsFocused(true);
@@ -27,16 +31,13 @@ const SearchInput = () => {
   return (
     <View style={styles.container}>
       {text.length === 0 && !isFocused ? (
-        <TouchableOpacity
-          style={styles.touchable}
-          onPress={() => setIsFocused(true)}
-        >
+        <TouchableOpacity style={styles.touchable} onPress={onFocusHandler}>
           <View style={styles.placeholder}>
             <Image
               style={styles.placeholderImg}
               source={require("../assets/icons/search.png")}
             />
-            <Text style={styles.placeholderText}>Procurar</Text>
+            <Text style={styles.placeholderText}>Search</Text>
           </View>
         </TouchableOpacity>
       ) : (
