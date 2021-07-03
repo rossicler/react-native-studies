@@ -4,17 +4,10 @@ import { StyleSheet, View, Image } from "react-native";
 import Colors from "../constants/Colors";
 import TextStyled from "../components/TextStyled";
 import TouchableStyled from "../components/TouchableStyled";
+import { getIdText } from "../utils/pokemonParser";
 
 const PokemonCard = ({ pokemon, ...props }) => {
   const pokemonColor = Colors.pokemonColors[pokemon.types[0].type.name];
-
-  const getIdText = (id) => {
-    let idText = "#";
-    for (let i = 0; i < 3 - id.toString().length; i++) {
-      idText += "0";
-    }
-    return idText + id;
-  };
 
   return (
     <View
