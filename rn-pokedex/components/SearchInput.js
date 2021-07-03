@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from "react";
 import {
   StyleSheet,
-  Text,
   View,
   TextInput,
   Image,
@@ -10,6 +9,7 @@ import {
 import { Ionicons } from "@expo/vector-icons";
 
 import Colors from "../constants/Colors";
+import TextStyled from "../components/TextStyled";
 
 const SearchInput = (props) => {
   const [text, setText] = useState(""),
@@ -37,7 +37,7 @@ const SearchInput = (props) => {
               style={styles.placeholderImg}
               source={require("../assets/icons/search.png")}
             />
-            <Text style={styles.placeholderText}>Search</Text>
+            <TextStyled style={styles.placeholderText}>Search</TextStyled>
           </View>
         </TouchableOpacity>
       ) : (

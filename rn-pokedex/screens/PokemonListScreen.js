@@ -1,7 +1,6 @@
 import React, { useState, useCallback, useEffect } from "react";
 import {
   StyleSheet,
-  Text,
   View,
   Image,
   Button,
@@ -13,6 +12,7 @@ import { useDispatch, useSelector } from "react-redux";
 
 import SearchInput from "../components/SearchInput";
 import PokemonCard from "../components/PokemonCard";
+import TextStyled from "../components/TextStyled";
 import Colors from "../constants/Colors";
 import * as pokemonsActions from "../store/pokemon-actions";
 
@@ -64,7 +64,7 @@ const PokemonListScreen = () => {
     return (
       <SafeAreaView style={styles.screen}>
         <View style={styles.centered}>
-          <Text>An error occurred!</Text>
+          <TextStyled>An error occurred!</TextStyled>
           <Button
             title="Try again"
             onPress={loadPokemons}
@@ -85,10 +85,10 @@ const PokemonListScreen = () => {
               uri: "https://img.pngio.com/ball-game-go-poke-pokeball-pokemon-pokestop-icon-pokeball-icon-png-512_512.png",
             }}
           />
-          <Text style={styles.logoText}>Pokédex</Text>
+          <TextStyled style={styles.logoText}>Pokédex</TextStyled>
         </View>
         <View>
-          <Text>Sort</Text>
+          <TextStyled>Sort</TextStyled>
         </View>
       </View>
       <View style={styles.searchContainer}>
@@ -132,7 +132,6 @@ const styles = StyleSheet.create({
   logoContainer: {
     width: "80%",
     flexDirection: "row",
-    justifyContent: "flex-start",
     alignItems: "center",
   },
   logoImg: {
@@ -141,7 +140,8 @@ const styles = StyleSheet.create({
   },
   logoText: {
     paddingHorizontal: 15,
-    fontSize: 22,
+    fontSize: 30,
+    fontFamily: "poppins-bold",
   },
   searchContainer: {
     marginBottom: 20,

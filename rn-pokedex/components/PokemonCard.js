@@ -1,6 +1,8 @@
 import React from "react";
-import { StyleSheet, Text, View, Image } from "react-native";
+import { StyleSheet, View, Image } from "react-native";
+
 import Colors from "../constants/Colors";
+import TextStyled from "../components/TextStyled";
 
 const PokemonCard = ({ pokemon, ...props }) => {
   const pokemonColor = Colors.pokemonColors[pokemon.types[0].type.name];
@@ -21,13 +23,13 @@ const PokemonCard = ({ pokemon, ...props }) => {
       }}
     >
       <View style={styles.idContainer}>
-        <Text style={{ ...styles.idText, color: pokemonColor }}>
+        <TextStyled style={{ ...styles.idText, color: pokemonColor }}>
           {getIdText(pokemon.id)}
-        </Text>
+        </TextStyled>
       </View>
       <Image source={{ uri: pokemon.imageUrl }} style={styles.image} />
       <View style={{ ...styles.titleContainer, backgroundColor: pokemonColor }}>
-        <Text style={styles.titleText}>{pokemon.name}</Text>
+        <TextStyled style={styles.titleText}>{pokemon.name}</TextStyled>
       </View>
     </View>
   );
