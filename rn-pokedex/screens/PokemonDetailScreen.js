@@ -5,11 +5,13 @@ import { SafeAreaView } from "react-native-safe-area-context";
 import Colors from "../constants/Colors";
 import TextStyled from "../components/TextStyled";
 import TouchableStyled from "../components/TouchableStyled";
+import PillTag from "../components/PillTag";
 import { getIdText } from "../utils/pokemonParser";
 
 const PokemonDetailScreen = (props) => {
   const pokemon = props.route.params.pokemon;
   const pokemonColor = Colors.pokemonColors[pokemon.types[0].type.name];
+  console.log(pokemon.types);
 
   return (
     <SafeAreaView style={{ ...styles.screen, backgroundColor: pokemonColor }}>
@@ -36,7 +38,19 @@ const PokemonDetailScreen = (props) => {
         <Image source={{ uri: pokemon.imageUrl }} style={styles.pokemonImg} />
       </View>
       <View style={styles.card}>
-        <TextStyled>Teste</TextStyled>
+        <View style={styles.cardContent}>
+          <View style={styles.tags}>
+            {pokemon.types.map((item) => (
+              <PillTag
+                key={item.slot}
+                backgroundColor={Colors.pokemonColors[item.type.name]}
+                style={styles.pill}
+              >
+                {item.type.name}
+              </PillTag>
+            ))}
+          </View>
+        </View>
       </View>
     </SafeAreaView>
   );
@@ -108,5 +122,16 @@ const styles = StyleSheet.create({
     marginTop: "45%",
     width: "97%",
     marginBottom: Dimensions.get("window").width * 0.015,
+  },
+  cardContent: {
+    marginTop: Dimensions.get("window").height * 0.12,
+  },
+  tags: {
+    flexDirection: "row",
+    justifyContent: "center",
+    alignItems: "center",
+  },
+  pill: {
+    marginHorizontal: 12,
   },
 });
