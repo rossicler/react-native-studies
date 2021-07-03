@@ -41,7 +41,7 @@ const styles = StyleSheet.create({
   card: {
     flex: 1 / 3,
     margin: 5,
-    height: 130,
+    height: 140,
     borderRadius: 8,
     borderWidth: 1,
     backgroundColor: "white",
@@ -50,24 +50,25 @@ const styles = StyleSheet.create({
   idContainer: {
     height: "15%",
     alignItems: "flex-end",
-    justifyContent: "center",
+    justifyContent: "flex-end",
     paddingHorizontal: 10,
   },
   idText: {
-    fontSize: 11,
+    fontSize: 10,
   },
   image: {
-    height: "65%",
+    height: "63%",
     aspectRatio: 1,
     alignSelf: "center",
   },
   titleContainer: {
-    height: "20%",
+    height: "22%",
     justifyContent: "center",
     alignItems: "center",
   },
   titleText: {
     color: "white",
     textTransform: "capitalize",
+    fontSize: 12,
   },
 });
