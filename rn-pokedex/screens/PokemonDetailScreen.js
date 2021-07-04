@@ -52,44 +52,47 @@ const PokemonDetailScreen = (props) => {
               </PillTag>
             ))}
           </View>
-          <View style={styles.aboutContainer}>
-            <TextStyled style={{ ...styles.contentTitle, color: pokemonColor }}>
-              About
-            </TextStyled>
-            <View style={styles.aboutContent}>
-              <View style={{ ...styles.aboutItem, ...styles.borderRight }}>
-                <View style={styles.row}>
-                  <Image
-                    source={require("../assets/icons/weight.png")}
-                    style={styles.icon}
-                    resizeMode="contain"
-                  />
-                  <TextStyled>{pokemon.weight} kg</TextStyled>
+          <ScrollView>
+            <View style={styles.aboutContainer}>
+              <TextStyled
+                style={{ ...styles.contentTitle, color: pokemonColor }}
+              >
+                About
+              </TextStyled>
+              <View style={styles.aboutContent}>
+                <View style={{ ...styles.aboutItem, ...styles.borderRight }}>
+                  <View style={styles.row}>
+                    <Image
+                      source={require("../assets/icons/weight.png")}
+                      style={styles.icon}
+                      resizeMode="contain"
+                    />
+                    <TextStyled>{pokemon.weight} kg</TextStyled>
+                  </View>
+                  <TextStyled style={styles.smallText}>Weight</TextStyled>
                 </View>
-                <TextStyled style={styles.smallText}>Weight</TextStyled>
-              </View>
-              <View style={{ ...styles.aboutItem, ...styles.borderRight }}>
-                <View style={styles.row}>
-                  <Image
-                    source={require("../assets/icons/height.png")}
-                    style={styles.icon}
-                    resizeMode="contain"
-                  />
-                  <TextStyled>{pokemon.height} m</TextStyled>
+                <View style={{ ...styles.aboutItem, ...styles.borderRight }}>
+                  <View style={styles.row}>
+                    <Image
+                      source={require("../assets/icons/height.png")}
+                      style={styles.icon}
+                      resizeMode="contain"
+                    />
+                    <TextStyled>{pokemon.height} m</TextStyled>
+                  </View>
+                  <TextStyled style={styles.smallText}>Height</TextStyled>
                 </View>
-                <TextStyled style={styles.smallText}>Height</TextStyled>
-              </View>
-              <View style={styles.aboutItem}>
-                {pokemon.abilities.map((item) => (
-                  <TextStyled key={item.slot} style={styles.abilitiesText}>
-                    {item.ability.name}
-                  </TextStyled>
-                ))}
-                <TextStyled style={styles.smallText}>Abilities</TextStyled>
+                <View style={styles.aboutItem}>
+                  {pokemon.abilities.map((item) => (
+                    <TextStyled key={item.slot} style={styles.abilitiesText}>
+                      {item.ability.name}
+                    </TextStyled>
+                  ))}
+                  <TextStyled style={styles.smallText}>Abilities</TextStyled>
+                </View>
               </View>
             </View>
-          </View>
-          <ScrollView>
+
             <View style={styles.statsContainer}>
               <TextStyled
                 style={{ ...styles.contentTitle, color: pokemonColor }}
@@ -188,6 +191,7 @@ const styles = StyleSheet.create({
   },
   tags: {
     flexDirection: "row",
+    marginBottom: 15,
   },
   pill: {
     marginHorizontal: 12,
@@ -199,7 +203,6 @@ const styles = StyleSheet.create({
   aboutContainer: {
     justifyContent: "center",
     alignItems: "center",
-    marginTop: 15,
     marginBottom: 10,
   },
   aboutContent: {
