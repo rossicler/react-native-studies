@@ -1,6 +1,7 @@
 import React from "react";
 import { StyleSheet, View, Image, Dimensions, ScrollView } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
+import { useSelector } from "react-redux";
 
 import Colors from "../constants/Colors";
 import TextStyled from "../components/TextStyled";
@@ -8,10 +9,26 @@ import TouchableStyled from "../components/TouchableStyled";
 import PillTag from "../components/PillTag";
 import StatRow from "../components/StatRow";
 import { fillZeros } from "../utils/pokemonParser";
+import PokemonsGenMetaData from "../constants/PokemonsGenMetaData";
 
 const PokemonDetailScreen = (props) => {
-  const pokemon = props.route.params.pokemon;
+  const pokemonId = props.route.params.pokemonId;
+  const pokemon = useSelector((state) =>
+    state.pokemons.pokemons.find((item) => item.id === pokemonId)
+  );
   const pokemonColor = Colors.pokemonColors[pokemon.types[0].type.name];
+
+  const navigateHandler = (to) => {
+    if (to === "next") {
+      props.navigation.navigate("PokemonDetail", {
+        pokemonId: pokemonId + 1,
+      });
+    } else {
+      props.navigation.navigate("PokemonDetail", {
+        pokemonId: pokemonId - 1,
+      });
+    }
+  };
 
   return (
     <SafeAreaView style={{ ...styles.screen, backgroundColor: pokemonColor }}>
@@ -38,6 +55,30 @@ const PokemonDetailScreen = (props) => {
       </View>
       <View style={styles.imageContainer}>
         <Image source={{ uri: pokemon.imageUrl }} style={styles.pokemonImg} />
+      </View>
+      <View style={styles.buttonsContainer}>
+        <View>
+          {pokemon.id > PokemonsGenMetaData.firstGen.start && (
+            <TouchableStyled onPress={() => navigateHandler("prev")}>
+              <Image
+                style={styles.iconBtn}
+                source={require("../assets/icons/chevron-left.png")}
+                resizeMode="contain"
+              />
+            </TouchableStyled>
+          )}
+        </View>
+        <View>
+          {pokemon.id < PokemonsGenMetaData.firstGen.end && (
+            <TouchableStyled onPress={() => navigateHandler("next")}>
+              <Image
+                style={styles.iconBtn}
+                source={require("../assets/icons/chevron-right.png")}
+                resizeMode="contain"
+              />
+            </TouchableStyled>
+          )}
+        </View>
       </View>
       <View style={styles.card}>
         <View style={styles.cardContent}>
@@ -124,11 +165,10 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
   headerContainer: {
-    width: "100%",
+    width: "90%",
     flexDirection: "row",
     justifyContent: "space-between",
     alignItems: "center",
-    paddingHorizontal: 25,
     marginTop: 20,
     height: 50,
   },
@@ -173,13 +213,22 @@ const styles = StyleSheet.create({
     height: Dimensions.get("window").width * 0.6,
     aspectRatio: 1,
   },
+  buttonsContainer: {
+    width: "87%",
+    marginTop: "35%",
+    flexDirection: "row",
+    justifyContent: "space-between",
+  },
+  iconBtn: {
+    height: 20,
+  },
   card: {
     flex: 1,
     elevation: -1,
     backgroundColor: "white",
     borderRadius: 8,
     padding: 5,
-    marginTop: "45%",
+    marginTop: "5%",
     width: "97%",
     marginBottom: Dimensions.get("window").width * 0.015,
   },

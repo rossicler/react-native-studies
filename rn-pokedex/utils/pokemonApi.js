@@ -3,7 +3,9 @@ import { Pokemon } from "../models/pokemon.model";
 
 export const fetchAllPokemonsFromAPI = async () => {
   const responseList = await fetch(
-    `https://pokeapi.co/api/v2/pokemon/?limit=${PokemonsGenMetaData.firstGen.end}&offset=${PokemonsGenMetaData.firstGen.start}`
+    `https://pokeapi.co/api/v2/pokemon/?limit=${
+      PokemonsGenMetaData.firstGen.end
+    }&offset=${PokemonsGenMetaData.firstGen.start - 1}`
   );
 
   if (!responseList.ok) {

@@ -138,7 +138,7 @@ const PokemonListScreen = (props) => {
             pokemon={itemData.item}
             onSelect={() =>
               props.navigation.navigate("PokemonDetail", {
-                pokemon: itemData.item,
+                pokemonId: itemData.item.id,
               })
             }
           />
