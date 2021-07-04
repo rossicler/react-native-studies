@@ -1,56 +1,24 @@
-import { Pokemon } from "../models/pokemon.model";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+
+import { fetchAllPokemonsFromAPI } from "../utils/pokemonApi";
 
 export const SET_POKEMONS = "SET_POKEMONS";
 
 export const fetchPokemons = () => {
-  return async (dispatch, getState) => {
-    const pokemons = getState().pokemons.pokemons;
+  return async (dispatch) => {
     try {
-      const maxPokemons = 151;
-      const offset = pokemons.length;
-      let limit = 15;
-
-      if (offset > maxPokemons - limit) {
-        limit = maxPokemons - offset;
-      }
-      if (limit === 0) {
-        return;
+      let pokemons = JSON.parse(await AsyncStorage.getItem("pokemons"));
+      let shouldInsertOnDb = false;
+      if (!pokemons) {
+        pokemons = await fetchAllPokemonsFromAPI();
+        shouldInsertOnDb = true;
       }
 
-      const responseList = await fetch(
-        `https://pokeapi.co/api/v2/pokemon/?limit=${limit}&offset=${offset}`
-      );
+      dispatch({ type: SET_POKEMONS, pokemons: pokemons });
 
-      if (!responseList.ok) {
-        throw new Error("Something went wrong!");
+      if (shouldInsertOnDb) {
+        AsyncStorage.setItem("pokemons", JSON.stringify(pokemons));
       }
-
-      const resData = await responseList.json();
-      const loadedPokemons = pokemons;
-
-      for (item of resData.results) {
-        const response = await fetch(item.url);
-
-        if (!response.ok) {
-          throw new Error("Something went wrong!");
-        }
-
-        const pokemon = await response.json();
-
-        const newPokemon = new Pokemon(
-          pokemon.id,
-          pokemon.name,
-          pokemon.sprites.other["official-artwork"].front_default,
-          pokemon.types,
-          pokemon.weight,
-          pokemon.height,
-          pokemon.abilities,
-          pokemon.stats
-        );
-        loadedPokemons.push(newPokemon);
-      }
-
-      dispatch({ type: SET_POKEMONS, pokemons: loadedPokemons });
     } catch (err) {
       throw err;
     }

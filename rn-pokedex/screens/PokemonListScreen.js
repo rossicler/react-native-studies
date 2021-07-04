@@ -52,15 +52,10 @@ const PokemonListScreen = (props) => {
     } else {
       setPokemons(allPokemons);
     }
-  }, [searchText]);
-
-  const onEndReachedHandler = () => {
-    if (!isLoading) {
-      loadPokemons();
-    }
-  };
+  }, [searchText, allPokemons]);
 
   if (error) {
+    console.log(error);
     return (
       <SafeAreaView style={styles.screen}>
         <View style={styles.centered}>
@@ -70,6 +65,16 @@ const PokemonListScreen = (props) => {
             onPress={loadPokemons}
             color={Colors.darkGray}
           />
+        </View>
+      </SafeAreaView>
+    );
+  }
+
+  if (isLoading) {
+    return (
+      <SafeAreaView style={styles.screen}>
+        <View style={styles.centered}>
+          <ActivityIndicator size="large" color={Colors.darkGray} />
         </View>
       </SafeAreaView>
     );
@@ -108,13 +113,7 @@ const PokemonListScreen = (props) => {
           />
         )}
         numColumns={3}
-        onEndReached={() => onEndReachedHandler()}
       />
-      {isLoading && (
-        <View style={styles.centered}>
-          <ActivityIndicator size="large" color={Colors.darkGray} />
-        </View>
-      )}
     </SafeAreaView>
   );
 };
@@ -127,7 +126,7 @@ const styles = StyleSheet.create({
     marginHorizontal: 15,
   },
   centered: {
-    height: 30,
+    flex: 1,
     justifyContent: "center",
     alignItems: "center",
   },
