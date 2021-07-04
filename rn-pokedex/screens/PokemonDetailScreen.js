@@ -1,17 +1,17 @@
 import React from "react";
-import { StyleSheet, View, Image, Dimensions } from "react-native";
+import { StyleSheet, View, Image, Dimensions, ScrollView } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 
 import Colors from "../constants/Colors";
 import TextStyled from "../components/TextStyled";
 import TouchableStyled from "../components/TouchableStyled";
 import PillTag from "../components/PillTag";
-import { getIdText } from "../utils/pokemonParser";
+import StatRow from "../components/StatRow";
+import { fillZeros } from "../utils/pokemonParser";
 
 const PokemonDetailScreen = (props) => {
   const pokemon = props.route.params.pokemon;
   const pokemonColor = Colors.pokemonColors[pokemon.types[0].type.name];
-  console.log(pokemon.types);
 
   return (
     <SafeAreaView style={{ ...styles.screen, backgroundColor: pokemonColor }}>
@@ -32,7 +32,9 @@ const PokemonDetailScreen = (props) => {
           </TouchableStyled>
           <TextStyled style={styles.headerTitle}>{pokemon.name}</TextStyled>
         </View>
-        <TextStyled style={styles.headerId}>{getIdText(pokemon.id)}</TextStyled>
+        <TextStyled style={styles.headerId}>
+          #{fillZeros(3, pokemon.id)}
+        </TextStyled>
       </View>
       <View style={styles.imageContainer}>
         <Image source={{ uri: pokemon.imageUrl }} style={styles.pokemonImg} />
@@ -50,6 +52,61 @@ const PokemonDetailScreen = (props) => {
               </PillTag>
             ))}
           </View>
+          <View style={styles.aboutContainer}>
+            <TextStyled style={{ ...styles.contentTitle, color: pokemonColor }}>
+              About
+            </TextStyled>
+            <View style={styles.aboutContent}>
+              <View style={{ ...styles.aboutItem, ...styles.borderRight }}>
+                <View style={styles.row}>
+                  <Image
+                    source={require("../assets/icons/weight.png")}
+                    style={styles.icon}
+                    resizeMode="contain"
+                  />
+                  <TextStyled>{pokemon.weight} kg</TextStyled>
+                </View>
+                <TextStyled style={styles.smallText}>Weight</TextStyled>
+              </View>
+              <View style={{ ...styles.aboutItem, ...styles.borderRight }}>
+                <View style={styles.row}>
+                  <Image
+                    source={require("../assets/icons/height.png")}
+                    style={styles.icon}
+                    resizeMode="contain"
+                  />
+                  <TextStyled>{pokemon.height} m</TextStyled>
+                </View>
+                <TextStyled style={styles.smallText}>Height</TextStyled>
+              </View>
+              <View style={styles.aboutItem}>
+                {pokemon.abilities.map((item) => (
+                  <TextStyled key={item.slot} style={styles.abilitiesText}>
+                    {item.ability.name}
+                  </TextStyled>
+                ))}
+                <TextStyled style={styles.smallText}>Abilities</TextStyled>
+              </View>
+            </View>
+          </View>
+          <ScrollView>
+            <View style={styles.statsContainer}>
+              <TextStyled
+                style={{ ...styles.contentTitle, color: pokemonColor }}
+              >
+                Stats Base
+              </TextStyled>
+              <View style={styles.statsListContainer}>
+                {pokemon.stats.map((item) => (
+                  <StatRow
+                    key={item.stat.name}
+                    color={pokemonColor}
+                    item={item}
+                  />
+                ))}
+              </View>
+            </View>
+          </ScrollView>
         </View>
       </View>
     </SafeAreaView>
@@ -124,14 +181,64 @@ const styles = StyleSheet.create({
     marginBottom: Dimensions.get("window").width * 0.015,
   },
   cardContent: {
-    marginTop: Dimensions.get("window").height * 0.12,
+    marginTop: Dimensions.get("window").height * 0.1,
+    justifyContent: "center",
+    alignItems: "center",
+    marginBottom: 30,
   },
   tags: {
     flexDirection: "row",
-    justifyContent: "center",
-    alignItems: "center",
   },
   pill: {
     marginHorizontal: 12,
+  },
+  contentTitle: {
+    fontFamily: "poppins-bold",
+    fontSize: 18,
+  },
+  aboutContainer: {
+    justifyContent: "center",
+    alignItems: "center",
+    marginTop: 15,
+    marginBottom: 10,
+  },
+  aboutContent: {
+    flexDirection: "row",
+    justifyContent: "space-evenly",
+    width: "100%",
+    paddingHorizontal: 30,
+  },
+  row: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
+    flex: 1,
+  },
+  borderRight: {
+    borderRightColor: Colors.lightGray,
+    borderRightWidth: 1,
+  },
+  aboutItem: {
+    flex: 1 / 3,
+    alignItems: "center",
+    justifyContent: "space-between",
+    paddingTop: 10,
+  },
+  icon: {
+    height: 22,
+    marginRight: 7,
+  },
+  smallText: {
+    fontSize: 12,
+    color: Colors.mediumGray,
+  },
+  abilitiesText: {
+    textTransform: "capitalize",
+  },
+  statsContainer: {
+    alignItems: "center",
+  },
+  statsListContainer: {
+    width: "95%",
   },
 });

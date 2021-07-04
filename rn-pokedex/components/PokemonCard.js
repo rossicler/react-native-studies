@@ -4,7 +4,7 @@ import { StyleSheet, View, Image } from "react-native";
 import Colors from "../constants/Colors";
 import TextStyled from "../components/TextStyled";
 import TouchableStyled from "../components/TouchableStyled";
-import { getIdText } from "../utils/pokemonParser";
+import { fillZeros } from "../utils/pokemonParser";
 
 const PokemonCard = ({ pokemon, ...props }) => {
   const pokemonColor = Colors.pokemonColors[pokemon.types[0].type.name];
@@ -20,7 +20,7 @@ const PokemonCard = ({ pokemon, ...props }) => {
         <View>
           <View style={styles.idContainer}>
             <TextStyled style={{ ...styles.idText, color: pokemonColor }}>
-              {getIdText(pokemon.id)}
+              #{fillZeros(3, pokemon.id)}
             </TextStyled>
           </View>
           <Image source={{ uri: pokemon.imageUrl }} style={styles.image} />
