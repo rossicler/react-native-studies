@@ -13,6 +13,7 @@ import { useDispatch, useSelector } from "react-redux";
 import SearchInput from "../components/SearchInput";
 import PokemonCard from "../components/PokemonCard";
 import TextStyled from "../components/TextStyled";
+import Touchable from "../components/TouchableStyled";
 import Colors from "../constants/Colors";
 import * as pokemonsActions from "../store/pokemon-actions";
 
@@ -24,7 +25,9 @@ const PokemonListScreen = (props) => {
     [isLoading, setIsLoading] = useState(false),
     [pokemons, setPokemons] = useState(
       useSelector((state) => state.pokemons.pokemons)
-    );
+    ),
+    [sortBy, setSortBy] = useState("id"),
+    [isSorting, setIsSorting] = useState(false);
 
   const dispatch = useDispatch();
 
@@ -53,6 +56,18 @@ const PokemonListScreen = (props) => {
       setPokemons(allPokemons);
     }
   }, [searchText, allPokemons]);
+
+  useEffect(() => {
+    setIsSorting(true);
+    let sortedPokemons = [...pokemons];
+    if (sortBy === "id") {
+      sortedPokemons.sort((a, b) => a.id - b.id);
+    } else {
+      sortedPokemons.sort((a, b) => a.name.localeCompare(b.name));
+    }
+    setPokemons(sortedPokemons);
+    setIsSorting(false);
+  }, [sortBy, setIsSorting]);
 
   if (error) {
     console.log(error);
@@ -92,9 +107,25 @@ const PokemonListScreen = (props) => {
           />
           <TextStyled style={styles.logoText}>Pokédex</TextStyled>
         </View>
-        <View>
-          <TextStyled>Sort</TextStyled>
-        </View>
+        <Touchable
+          onPress={() =>
+            setSortBy((curSort) => (curSort === "id" ? "az" : "id"))
+          }
+        >
+          {!isSorting ? (
+            <Image
+              source={
+                sortBy === "id"
+                  ? require("../assets/icons/sort-id.png")
+                  : require("../assets/icons/sort-az.png")
+              }
+              style={styles.sortImg}
+              resizeMode="contain"
+            />
+          ) : (
+            <ActivityIndicator size="small" color={Colors.darkGray} />
+          )}
+        </Touchable>
       </View>
       <View style={styles.searchContainer}>
         <SearchInput onChangeText={(text) => setSearchText(text)} />
@@ -150,6 +181,9 @@ const styles = StyleSheet.create({
     paddingHorizontal: 15,
     fontSize: 30,
     fontFamily: "poppins-bold",
+  },
+  sortImg: {
+    width: 25,
   },
   searchContainer: {
     marginBottom: 20,
